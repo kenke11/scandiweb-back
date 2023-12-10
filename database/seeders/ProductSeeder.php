@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Product;
 
-class UserSeeder
+class ProductSeeder
 {
     public function run()
     {
-        User::factory(10);
+        Product::factory(10);
     }
 }

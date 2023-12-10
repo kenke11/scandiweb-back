@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Database\Connection;
-use Database\Seeders\UserSeeder;
+use Database\Seeders\DataSeeder;
 use Dotenv\Dotenv;
 
 class SeedData
@@ -15,7 +15,7 @@ class SeedData
         $databaseConfig = require_once __DIR__ . '/../../config/database.php';
         Connection::connect($databaseConfig['mysql']);
 
-        $dataSeeder = new UserSeeder();
+        $dataSeeder = new DataSeeder();
         $dataSeeder->run();
 
         echo "all seeders successfully seeded.\n";

@@ -6,7 +6,7 @@ class DataSeeder
 {
     public function run()
     {
-        $userSeeder = new UserSeeder();
-        $userSeeder->run();
+        $productSeeder = new ProductSeeder();
+        $productSeeder->run();
     }
 }
