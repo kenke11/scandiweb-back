@@ -2,12 +2,18 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
+
 class UserController
 {
     public function index()
     {
-        $user = 'user';
+        $user = User::create([
+            'name' => 'rame',
+            'email' => 'ex@ex.com'
+        ]);
 
-        return $user;
+        var_dump($user);
+        die();
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Database\Eloquent;
 
 use App\Database\Connection;
-use Database\Factories\UserFactory;
 
-abstract class Model
+abstract class Model extends Crud
 {
     public static function factory($count = 1)
     {
