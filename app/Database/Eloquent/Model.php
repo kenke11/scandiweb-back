@@ -48,4 +48,9 @@ abstract class Model extends Crud
         $pdo = Connection::getPdo();
         $pdo->query("INSERT INTO $tableName (" . $keys . ", created_at) VALUES ($values, NOW())");
     }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
 }

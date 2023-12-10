@@ -6,6 +6,7 @@ use App\Database\Connection;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../functions.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__, '../.env');
 $dotenv->load();
@@ -31,7 +32,7 @@ if (strpos($request_uri, '/api') === 0) {
     notFound();
 }
 
-function responseNull($response)
+function responseNull($response): void
 {
     if ($response !== null) {
         echo $response;
@@ -41,7 +42,7 @@ function responseNull($response)
     }
 }
 
-function notFound()
+function notFound(): void
 {
     http_response_code(404);
     echo '404 Not Found';

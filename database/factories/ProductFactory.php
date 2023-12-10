@@ -12,7 +12,7 @@ class ProductFactory extends Factory
 
         return [
             'sku' => $this->fakeSKU(),
-            'name' => $this->fakeName(),
+            'name' => $this->fakeProductName(),
             'price' => $this->fakeNumber(),
             'product_type' => $this->fakeEnumVariable($enumValues)
         ];

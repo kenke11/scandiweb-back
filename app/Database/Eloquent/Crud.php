@@ -13,31 +13,48 @@ abstract class Crud
         $this->data = $data;
     }
 
+    public static function all(): array
+    {
+        $tableName = self::getTableName();
+        $pdo = Connection::getPdo();
+
+        $statement = $pdo->query("SELECT * FROM {$tableName}");
+        $itemRecords = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $items = [];
+        foreach ($itemRecords as $itemData) {
+            $crudInstance = new static();
+            $crudInstance->setData($itemData);
+            $items[] = $crudInstance;
+        }
+
+        return $items;
+    }
+
     public static function create(array $data = []): Crud
     {
+        $tableName = self::getTableName();
         $pdo = Connection::getPdo();
 
         $data['created_at'] = $data['created_at'] ?? date('Y-m-d H:i:s');
-
         $keys = implode(', ', array_keys($data));
         $placeholders = ':' . implode(', :', array_keys($data));
 
-        $query = "INSERT INTO users ($keys) VALUES ($placeholders)";
+        $query = "INSERT INTO $tableName ($keys) VALUES ($placeholders)";
 
         $statement = $pdo->prepare($query);
         $statement->execute($data);
-
         $id = $pdo->lastInsertId();
 
         return self::find($id);
     }
 
-
     public static function find($id)
     {
+        $tableName = self::getTableName();
         $pdo = Connection::getPdo();
 
-        $statement = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $statement = $pdo->prepare("SELECT * FROM $tableName WHERE id = :id");
         $statement->execute(['id' => $id]);
 
         $userData = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -55,19 +72,20 @@ abstract class Crud
         }
 
         $pdo = Connection::getPdo();
-
         $fields = [];
+
         foreach ($data as $key => $value) {
             $fields[] = "$key = :$key";
         }
-        $fieldsString = implode(', ', $fields);
 
-        $query = "UPDATE users SET $fieldsString WHERE id = :id";
+        $fieldsString = implode(', ', $fields);
+        $tableName = self::getTableName();
+
+        $query = "UPDATE $tableName SET $fieldsString WHERE id = :id";
         $data['id'] = $this->data['id'];
 
         $statement = $pdo->prepare($query);
         $statement->execute($data);
-
         return self::find($data['id']);
     }
 
@@ -81,8 +99,17 @@ abstract class Crud
         }
 
         $pdo = Connection::getPdo();
+        $tableName = self::getTableName();
 
-        $statement = $pdo->prepare("DELETE FROM users WHERE id = :id");
+        $statement = $pdo->prepare("DELETE FROM $tableName WHERE id = :id");
         $statement->execute(['id' => $this->data['id']]);
+    }
+
+    private static function getTableName(): string
+    {
+        $modelClass = get_called_class();
+        $modelClassParts = explode('\\', $modelClass);
+        $className = end($modelClassParts);
+        return strtolower($className) . 's';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
+use App\Controllers\ProductController;
 use App\Router\ApiRouter;
-use App\Controllers\UserController;
 
-ApiRouter::get('/api/users', [UserController::class, 'index']);
+ApiRouter::get('/api/products', [ProductController::class, 'index']);
