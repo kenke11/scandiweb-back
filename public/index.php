@@ -2,12 +2,20 @@
 
 namespace App\Controllers\UserController;
 
+use App\Database\Connection;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__, '../.env');
 $dotenv->load();
+
+if (
+    isset($_ENV['DB_HOST'], $_ENV['DB_DATABASE'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'])
+) {
+    $databaseConfig = require_once __DIR__ . '/../config/database.php';
+    Connection::connect($databaseConfig['mysql']);
+}
 
 $request_uri = $_SERVER['REQUEST_URI'];
 $request_method = $_SERVER['REQUEST_METHOD'];
@@ -18,16 +26,23 @@ if (strpos($request_uri, '/api') === 0) {
 
     $response = \App\Router\ApiRouter::handle($request_uri, $request_method);
 
+    responseNull($response);
+} else {
+    notFound();
+}
+
+function responseNull($response)
+{
     if ($response !== null) {
         echo $response;
         exit;
     } else {
-        // Handle 404
-        http_response_code(404);
-        echo '404 Not Found';
+        notFound();
     }
-} else {
-    // Handle other routes (if any)
+}
+
+function notFound()
+{
     http_response_code(404);
     echo '404 Not Found';
 }

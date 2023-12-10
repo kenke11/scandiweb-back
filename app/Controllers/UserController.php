@@ -6,8 +6,8 @@ class UserController
 {
     public function index()
     {
-        $databaseHost = $_ENV['DB_HOST'];
+        $user = 'user';
 
-        return $databaseHost;
+        return $user;
     }
 }
