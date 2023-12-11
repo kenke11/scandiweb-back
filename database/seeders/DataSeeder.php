@@ -10,5 +10,7 @@ class DataSeeder
         $productSeeder->run();
         $bookSeeder = new BookSeeder();
         $bookSeeder->run();
+        $dvdSeeder = new DVDSeeder();
+        $dvdSeeder->run();
     }
 }
