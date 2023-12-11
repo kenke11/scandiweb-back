@@ -12,5 +12,7 @@ class DataSeeder
         $bookSeeder->run();
         $dvdSeeder = new DVDSeeder();
         $dvdSeeder->run();
+        $furnitureSeeder = new FurnitureSeeder();
+        $furnitureSeeder->run();
     }
 }

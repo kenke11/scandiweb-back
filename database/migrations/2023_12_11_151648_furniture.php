@@ -7,16 +7,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('dvds', function ($table) {
+        Schema::create('furnitures', function ($table) {
             $table->increments('id');
             $table->number('product_id')->unique();
-            $table->number('size');
+            $table->number('height');
+            $table->number('width');
+            $table->number('length');
             $table->timestamp('created_at');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('dvds');
+        Schema::dropIfExists('furnitures');
     }
 };
