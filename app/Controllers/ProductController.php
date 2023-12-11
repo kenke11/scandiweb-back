@@ -13,4 +13,19 @@ class ProductController
 
         return response($products);
     }
+
+    public function delete()
+    {
+        try {
+            $ids = array_map('trim', explode(",", $_POST['ids']));
+            foreach ($ids as $id)
+            {
+                Product::find($id)->delete();
+            }
+        } catch (\Exception $exception) {
+            return response($exception, 500);
+        }
+
+        return response(["message" => 'Products successfully deleted!']);
+    }
 }
