@@ -8,5 +8,7 @@ class DataSeeder
     {
         $productSeeder = new ProductSeeder();
         $productSeeder->run();
+        $bookSeeder = new BookSeeder();
+        $bookSeeder->run();
     }
 }
