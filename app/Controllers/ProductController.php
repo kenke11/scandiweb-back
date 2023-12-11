@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 
 use App\Models\Product;
+use App\Providers\ProductProvider;
 
 class ProductController
 {
@@ -12,6 +13,17 @@ class ProductController
         $products = Product::all();
 
         return response($products);
+    }
+
+    public function store()
+    {
+        try {
+            $product = ProductProvider::createProduct($_POST);
+        } catch (\Exception $exception) {
+            return response($exception, 500);
+        }
+
+        return response(["message" => 'Products successfully created!', 'product' => $product->getData()]);
     }
 
     public function delete()
