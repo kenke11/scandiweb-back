@@ -24,6 +24,7 @@ function response($data, $statusCode = 200): false|string
 
         return json_encode($itemData);
     } elseif (is_array($data)) {
+
         return json_encode($data);
     } else {
         return json_encode($data);

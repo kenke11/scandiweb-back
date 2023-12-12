@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Models\Product;
 use App\Providers\ProductProvider;
+use App\Requests\ProductStoreRequest;
 
 class ProductController
 {
@@ -17,11 +18,14 @@ class ProductController
 
     public function store()
     {
-        try {
-            $product = ProductProvider::createProduct($_POST);
-        } catch (\Exception $exception) {
-            return response($exception, 500);
+        $request = ProductStoreRequest::validation();
+
+        if (array_key_exists('errors', $request))
+        {
+            return response($request, 422);
         }
+
+        $product = ProductProvider::createProduct($request);
 
         return response(["message" => 'Products successfully created!', 'product' => $product->getData()]);
     }
