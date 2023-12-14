@@ -21,7 +21,7 @@ abstract class Rule
 
         if ($count > 0)
         {
-            return "This $fieldName is already taken. Please choose a different $fieldName.";
+            return "This $fieldName is already taken.";
 
         }
 
