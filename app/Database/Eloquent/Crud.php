@@ -31,6 +31,35 @@ abstract class Crud
         return $items;
     }
 
+    public static function with(array $relations): array
+    {
+        $tableName = self::getTableName();
+        $pdo = Connection::getPdo();
+
+        $statement = $pdo->query("SELECT * FROM $tableName");
+        $itemRecords = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $items = [];
+        foreach ($itemRecords as $itemData) {
+            $crudInstance = new static();
+            $crudInstance->setData($itemData);
+
+            foreach ($relations as $relation) {
+                $relatedTableName = $relation . 's'; // Assuming table names follow plural convention
+                $relatedStatement = $pdo->prepare("SELECT * FROM $relatedTableName WHERE product_id = :id");
+                $relatedStatement->execute(['id' => $itemData['id']]);
+                $relatedData = $relatedStatement->fetch(\PDO::FETCH_ASSOC);
+                if ($relatedData) {
+                    $crudInstance->data[$relation] = $relatedData; // Assign related data to the current instance
+                }
+            }
+
+            $items[] = $crudInstance;
+        }
+
+        return $items;
+    }
+
     public static function create(array $data = []): Crud
     {
         $tableName = self::getTableName();
@@ -63,6 +92,26 @@ abstract class Crud
         $crudInstance->setData($userData);
 
         return $crudInstance;
+    }
+
+    public static function where($key, $value): array
+    {
+        $tableName = self::getTableName();
+        $pdo = Connection::getPdo();
+
+        $statement = $pdo->prepare("SELECT * FROM $tableName WHERE $key = :value");
+        $statement->execute(['value' => $value]);
+
+        $itemRecords = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $items = [];
+        foreach ($itemRecords as $itemData) {
+            $crudInstance = new static();
+            $crudInstance->setData($itemData);
+            $items[] = $crudInstance;
+        }
+
+        return $items;
     }
 
     public function update(array $data): Crud
