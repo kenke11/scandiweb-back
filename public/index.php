@@ -6,7 +6,7 @@ use App\Database\Connection;
 use Dotenv\Dotenv;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../functions.php';
+require_once __DIR__ . '/../functions.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__, '../.env');
 $dotenv->load();
